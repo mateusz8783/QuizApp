@@ -4,6 +4,7 @@ import React, {useEffect, useState} from 'react'
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 
 import Header from './Header';
+import Questions from "./Questions";
 
 const backendUrl = "http://localhost:3333"
 var apiState;
@@ -24,10 +25,10 @@ var apiRes;
 // }
 
 function getApiResponsePromise() {
-  console.log("Calling APIresponse...");
+  console.log("Calling getApiResponsePromise...");
   return new Promise((resolve, reject) => {
     setTimeout(function() {
-      var response = fetch(backendUrl)
+      var response = fetch(process.env.REACT_APP_BACKEND_ADDRESS + "/questions")
           .then(res => apiRes = res.text())
           .then(status => apiState = status)
           .catch(err => err);
@@ -54,7 +55,7 @@ function App() {
     // Update the document title using the browser API
     // callAPI();
 
-    document.title = `Testing variable ${apiResponse} here`;
+    //document.title = `Testing variable ${apiResponse} here`;
   });
 
   const [apiResponse, setApiResponse] = React.useState();
@@ -66,6 +67,7 @@ function App() {
 
     getApiResponse();
   }, [])
+
   if (!apiResponse) {
     return <div>Loading...</div>
   }
@@ -74,15 +76,23 @@ function App() {
     <div className="App">
         <BrowserRouter>
             <Header/>
-          <header className="App-header">
-            <img src={logo} className="App-logo" alt="logo" />
-            <p>
-              This is a home page
-            </p>
-            <p className="App-intro">
-              Api call: {apiResponse}
-            </p>
-          </header>
+          <div className = "app-content">
+            <Switch>
+              <Route exact path={"/"} render={props => {
+                return(
+                  <header className="App-header">
+                    <p>
+                      This is a home page
+                    </p>
+                    <p className="App-intro">
+                      Api call: {apiResponse}
+                    </p>
+                  </header>
+                );
+              }}/>
+              <Route path={"/questions"} render={props => <Questions/>}/>
+            </Switch>
+          </div>
         </BrowserRouter>
     </div>
   );
