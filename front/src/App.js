@@ -28,7 +28,7 @@ function getApiResponsePromise() {
   console.log("Calling getApiResponsePromise...");
   return new Promise((resolve, reject) => {
     setTimeout(function() {
-      var response = fetch(process.env.REACT_APP_BACKEND_ADDRESS + "/questions")
+      var response = fetch(process.env.REACT_APP_BACKEND_ADDRESS)
           .then(res => apiRes = res.text())
           .then(status => apiState = status)
           .catch(err => err);

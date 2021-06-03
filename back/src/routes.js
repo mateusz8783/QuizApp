@@ -1,12 +1,23 @@
 const express = require('express')
 const router = express.Router()
 const Question = require('./models/Question') // includes our model
+const User = require('./models/Users') // includes our model
 
 // get all quiz questions
 router.get('/questions', async (req, res) => {
     try {
         const questions = await Question.find()
         return res.status(200).json(questions)
+    } catch (error) {
+        return res.status(500).json({"error":error})
+    }
+})
+
+// get all users
+router.get('/users', async (req, res) => {
+    try {
+        const users = await User.find()
+        return res.status(200).json(users)
     } catch (error) {
         return res.status(500).json({"error":error})
     }
@@ -31,17 +42,40 @@ router.get('/questions/:id', async (req, res) => {
 // create one quiz question
 router.post('/questions', async (req, res) => {
     try {
+        const { owner } = req.body
         const { description } = req.body
         const { image } = req.body
         const { alternatives } = req.body
 
         const question = await Question.create({
+            owner,
             description,
             alternatives,
             image
         })
 
         return res.status(201).json(question)
+    } catch (error) {
+        return res.status(500).json({"error":error})
+    }
+})
+
+// create User
+router.post('/users', async (req, res) => {
+    try {
+        const { name } = req.body
+        const { email } = req.body
+        const { image } = req.body
+        const { token } = req.body
+
+        const user = await User.create({
+            name,
+            email,
+            image,
+            token
+        })
+
+        return res.status(201).json(user)
     } catch (error) {
         return res.status(500).json({"error":error})
     }

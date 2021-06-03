@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')
 
 const QuestionSchema = new mongoose.Schema({
+    owner: String,
     description: String,
     image: {
         type: String,
