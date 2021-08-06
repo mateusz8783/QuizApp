@@ -1,0 +1,45 @@
+var express = require('express');
+var router = express.Router();
+var multer = require('multer');
+var upload = multer({dest: './uploads'});
+
+var Question = require('../models/question');
+
+/* GET edit page. */
+router.get('/', function(req, res){
+  res.render('delete_question');
+});
+
+router.post('/',async function(req, res) {
+    var _id = req.body.question_id;
+    console.log(_id)
+  
+    req.checkBody('question_id','question_id field is required').notEmpty();
+
+    // Check Errors
+    var errors = req.validationErrors();
+  
+    if(errors){
+        res.render('error', {
+            errors: errors
+        });
+    } else{
+        try {
+          const question = await Question.deleteOne({_id})
+
+          if(question.deletedCount === 0){
+              return res.status(404).json()
+          }else{
+            req.flash('success', 'Question deleted successfully from the data base');
+          }
+        } catch (error) {
+          return res.status(500).json({"error":error})
+      }
+  
+
+      };
+      res.location('/');
+      res.redirect('/');
+  });
+
+module.exports = router;
