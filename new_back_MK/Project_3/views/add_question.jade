@@ -6,7 +6,7 @@ block content
  if errors
   each error, i in errors
    div.alert.alert-danger #{error.msg}
- form(method='delete', action='/add',enctype='multipart/form-data')
+ form(method='post', action='/add',enctype='multipart/form-data')
   .form-group
    label Question
    input.form-control(name='question', type='text', placeholder='Enter Text')

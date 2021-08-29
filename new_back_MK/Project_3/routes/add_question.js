@@ -7,7 +7,13 @@ var Question = require('../models/question');
 
 /* GET edit page. */
 router.get('/', function(req, res){
+  if (req.isAuthenticated()) {
     res.render('add_question');
+  } else {
+    req.flash('error', 'You must be logged in to access this page');
+    res.redirect('/users/login');
+  }
+    
 });
 
 router.post('/', upload.single('profileimage') ,function(req, res, next) {

@@ -7,7 +7,12 @@ var Question = require('../models/question');
 
 /* GET edit page. */
 router.get('/', function(req, res){
-  res.render('delete_question');
+  if (req.isAuthenticated()) {
+    res.render('delete_question');
+  } else {
+    req.flash('error', 'You must be logged in to access this page');
+    res.redirect('/users/login');
+  }
 });
 
 router.post('/',async function(req, res) {
