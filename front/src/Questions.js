@@ -1,4 +1,5 @@
 import React from "react";
+import LoadingScreen from "./LoadingScreen";
 
 function getQuestionsPromise() {
     console.log("Retrieving questions...");
@@ -28,7 +29,7 @@ function Questions() {
     }, [])
 
     if (!questions) {
-        return <div>Waiting for questions...</div>;
+        return <LoadingScreen/>
     }
 
     return (

@@ -1,34 +1,27 @@
+import 'bootstrap/dist/css/bootstrap.min.css';
 import logo from './logo.svg';
 import './App.css';
 import React, {useEffect, useState} from 'react'
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { LinkContainer } from "react-router-bootstrap";
+import Button from 'react-bootstrap';
+import Navbar from 'react-bootstrap/Navbar';
+import Nav from 'react-bootstrap/Nav';
+
 
 import Header from './Header';
 import Questions from "./Questions";
+import LoadingScreen from "./LoadingScreen";
 
 const backendUrl = "http://localhost:3333"
 var apiState;
 var apiRes;
 
-// function callAPI() {
-//   console.log("Calling API...");
-//
-//   var response = fetch(backendUrl)
-//       .then(res => apiRes = res.text())
-//       .then(status => apiState = status)
-//       .catch(err => err);
-//
-//   console.log(response);
-//   console.log(apiRes);
-//   console.log(apiState);
-//   return;
-// }
-
 function getApiResponsePromise() {
   console.log("Calling getApiResponsePromise...");
   return new Promise((resolve, reject) => {
     setTimeout(function() {
-      var response = fetch(process.env.REACT_APP_BACKEND_ADDRESS + "/questions")
+      var response = fetch(process.env.REACT_APP_BACKEND_ADDRESS)
           .then(res => apiRes = res.text())
           .then(status => apiState = status)
           .catch(err => err);
@@ -39,24 +32,6 @@ function getApiResponsePromise() {
 
 function App() {
   console.log("Starting...");
-  //callAPI();
-  let test;
-  // getApiResponsePromise()
-  //     .then(res => {
-  //       console.log(res);
-  //       test = res;
-  //       return true;
-  //     })
-  //     .catch(err => console.log("There was an error:" + err))
-
-  //const [count, callAPI] = useState(0);
-  // Similar to componentDidMount and componentDidUpdate:
-  useEffect(() => {
-    // Update the document title using the browser API
-    // callAPI();
-
-    //document.title = `Testing variable ${apiResponse} here`;
-  });
 
   const [apiResponse, setApiResponse] = React.useState();
   React.useEffect(() => {
@@ -69,13 +44,13 @@ function App() {
   }, [])
 
   if (!apiResponse) {
-    return <div>Loading...</div>
+    return <LoadingScreen/>
   }
 
   return (
     <div className="App">
-        <BrowserRouter>
-            <Header/>
+      <BrowserRouter>
+        <Header/>
           <div className = "app-content">
             <Switch>
               <Route exact path={"/"} render={props => {
