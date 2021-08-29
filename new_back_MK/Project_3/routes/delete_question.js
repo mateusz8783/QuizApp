@@ -16,6 +16,7 @@ router.get('/', function(req, res){
 });
 
 router.post('/',async function(req, res) {
+  if (req.isAuthenticated()) {
     var _id = req.body.question_id;
     console.log(_id)
   
@@ -45,6 +46,10 @@ router.post('/',async function(req, res) {
       };
       res.location('/');
       res.redirect('/');
+    } else {
+      req.flash('error', 'You must be logged in to access this page');
+      res.redirect('/users/login');
+    }
   });
 
 module.exports = router;

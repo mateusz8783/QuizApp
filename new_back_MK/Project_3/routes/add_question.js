@@ -17,6 +17,7 @@ router.get('/', function(req, res){
 });
 
 router.post('/', upload.single('profileimage') ,function(req, res, next) {
+  if (req.isAuthenticated()) {
     var question = req.body.question;
     var answer_1 = req.body.answer_1;
     var answer_2 = req.body.answer_2;
@@ -67,6 +68,10 @@ router.post('/', upload.single('profileimage') ,function(req, res, next) {
       res.location('/');
       res.redirect('/');
     }
+  } else {
+    req.flash('error', 'You must be logged in to access this page');
+    res.redirect('/users/login');
+  }
   });
 
 module.exports = router;
