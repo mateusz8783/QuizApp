@@ -1,7 +1,10 @@
 import React, { useState } from "react";
+import axios from 'axios';
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import "./Login.css";
+
+const backendLoginUrl = "http://localhost:3333/users/login"
 
 function Login() {
     const [username, setUsername] = useState("");
@@ -14,12 +17,26 @@ function Login() {
     function handleSubmit(event) {
         event.preventDefault();
 
-        try {
-            //await Auth.signIn(email, password);
+        axios.post(
+            backendLoginUrl,
+            {},
+            {
+                params: {
+                    username,
+                    password
+                }
+            }
+        )
+        .then(response => {
             alert("Logged in");
-        } catch (e) {
-            alert(e.message);
-        }
+            console.log(response);
+            return response.statusText;
+        })
+        .catch(error => {
+            alert(error.message);
+            console.log(error);
+            return error.message;
+        });
     }
 
     return (

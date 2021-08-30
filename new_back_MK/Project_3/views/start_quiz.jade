@@ -1,0 +1,24 @@
+extends layout
+
+block content
+  h2.page-header Questions in the data base
+  table
+    thead
+      tr
+        th |question|
+        th |answer_1|
+        th |answer_2|
+        th |answer_3|
+        th |corr_ans|
+        th |_id|
+        th |picture|
+    tbody
+      each data in data_questions
+        tr
+          td= data.question
+          td= data.answer_1
+          td= data.answer_2
+          td= data.answer_3
+          td= data.corr_ans
+          td= data._id
+          img.className#IdName(src="/images/"+data.profileimage alt="Image Title")

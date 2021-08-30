@@ -3,11 +3,6 @@ import logo from './logo.svg';
 import './App.css';
 import React, {useEffect, useState} from 'react'
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
-import { LinkContainer } from "react-router-bootstrap";
-import Button from 'react-bootstrap';
-import Navbar from 'react-bootstrap/Navbar';
-import Nav from 'react-bootstrap/Nav';
-
 
 import Header from './Header';
 import Login from "./Login";
@@ -35,19 +30,20 @@ function getApiResponsePromise() {
 function App() {
   console.log("Starting...");
 
-  const [apiResponse, setApiResponse] = useState("Not responding");
-  React.useEffect(() => {
-    async function getApiResponse() {
-      const res = await getApiResponsePromise(); // type: Promise<Interface>
-      setApiResponse(res);
-    }
-
-    getApiResponse();
-  }, [])
-
-  if (!apiResponse) {
-    return <LoadingScreen/>
-  }
+  const apiResponse = "NULL";
+  // const [apiResponse, setApiResponse] = useState("Not responding");
+  // React.useEffect(() => {
+  //   async function getApiResponse() {
+  //     const res = await getApiResponsePromise(); // type: Promise<Interface>
+  //     setApiResponse(res);
+  //   }
+  //
+  //   getApiResponse();
+  // }, [])
+  //
+  // if (!apiResponse) {
+  //   return <LoadingScreen/>
+  // }
 
   return (
     <div className="App">
