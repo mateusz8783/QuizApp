@@ -20,11 +20,18 @@ router.get('/login', function(req, res, next) {
   res.render('login', {title:'Login'});
 });
 
-router.post('/login',
-  passport.authenticate('local',{failureRedirect:'/users/login', failureFlash: 'Invalid username or password'}),
-  function(req, res) {
-   req.flash('success', 'You are now logged in');
-   res.redirect('/');
+router.post('/login', function(req, res, next) {
+  passport.authenticate('local', function(err, user, info) {
+    if (err) { return next(err); }
+    if (!user) {
+      return res.sendStatus(401);
+    }
+    req.logIn(user, function(err) {
+      if (err) { return next(err); }
+      req.flash('success', 'You are now logged in');
+      return res.redirect('/');
+    });
+  })(req, res, next);
 });
 
 router.get('/profile', function(req, res, next) {
