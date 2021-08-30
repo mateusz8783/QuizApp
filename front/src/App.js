@@ -10,8 +10,10 @@ import Nav from 'react-bootstrap/Nav';
 
 
 import Header from './Header';
+import Login from "./Login";
 import Questions from "./Questions";
 import LoadingScreen from "./LoadingScreen";
+import NotFound from "./NotFound";
 
 const backendUrl = "http://localhost:3333"
 var apiState;
@@ -33,7 +35,7 @@ function getApiResponsePromise() {
 function App() {
   console.log("Starting...");
 
-  const [apiResponse, setApiResponse] = React.useState();
+  const [apiResponse, setApiResponse] = useState("Not responding");
   React.useEffect(() => {
     async function getApiResponse() {
       const res = await getApiResponsePromise(); // type: Promise<Interface>
@@ -66,6 +68,8 @@ function App() {
                 );
               }}/>
               <Route path={"/questions"} render={props => <Questions/>}/>
+              <Route path={"/login"} render={props => <Login/>}/>
+              <Route><NotFound/></Route>
             </Switch>
           </div>
         </BrowserRouter>
