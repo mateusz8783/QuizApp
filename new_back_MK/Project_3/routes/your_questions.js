@@ -1,14 +1,14 @@
 var express = require('express');
 var router = express.Router();
 
-router.get('/', function (req, res) {
+router.get('/', async function (req, res) {
     if (req.isAuthenticated()) {
         var user = req.user;
         var MongoClient = require('mongodb').MongoClient;
-        MongoClient.connect(process.env.DATABASE_URL, function (err, db) {
+        await MongoClient.connect(process.env.DATABASE_URL, async function (err, db) {
             if (err) throw err;
             var dbo = db.db("quiz");
-            dbo.collection("questions").find({}).toArray(function(err, result) {
+            await dbo.collection("questions").find({}).toArray(async function(err, result) {
                 if (err) throw err;
                 data = result;
                 for( var i = 0; i < data.length; i++){ 
@@ -18,13 +18,11 @@ router.get('/', function (req, res) {
                 }
                 console.log(data)
                 db.close();
+                return res.json(data);
                 });
-            }); 
-            res.render('your_questions',{ data_questions : data });
-        
+            });
       } else {
-        req.flash('error', 'You must be logged in to access this page');
-        res.redirect('/users/login');
+        return res.sendStatus(401);
       }
     });
     

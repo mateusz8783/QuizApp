@@ -15,6 +15,10 @@ var bcrypt = require('bcryptjs');
 var mongo = require('mongodb');
 var mongoose = require('mongoose');
 var db = mongoose.connection;
+var cors = require('cors')
+var corsOptions = {
+  origin: 'http://localhost:3000',
+  credentials: true };
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
@@ -24,7 +28,7 @@ var add_question = require('./routes/add_question');
 var delete_question = require('./routes/delete_question');
 var your_questions = require('./routes/your_questions');
 
-var app = express();
+const app = express();
 
 app.use(express.static(path.join(__dirname, '/public')));
 
@@ -37,6 +41,8 @@ app.set('view engine', 'jade');
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+
+app.use(cors(corsOptions));
 
 // Make our db accessible to our router
 app.use(function(req,res,next){
