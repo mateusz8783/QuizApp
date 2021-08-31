@@ -13,28 +13,32 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/register', function(req, res, next) {
-  res.render('register',{title:'Register'});
+  res.sendStatus(200);
 });
 
 router.get('/login', function(req, res, next) {
-  res.render('login', {title:'Login'});
+  res.sendStatus(200);
 });
 
-router.post('/login',
-  passport.authenticate('local',{failureRedirect:'/users/login', failureFlash: 'Invalid username or password'}),
-  function(req, res) {
-   req.flash('success', 'You are now logged in');
-   res.redirect('/');
+router.post('/login', function(req, res, next) {
+  passport.authenticate('local', function(err, user, info) {
+    if (err) { return next(err); }
+    if (!user) {
+      return res.sendStatus(401);
+    }
+    req.logIn(user, function(err) {
+      if (err) { return next(err); }
+      return res.send(user);
+    });
+  })(req, res, next);
 });
 
 router.get('/profile', function(req, res, next) {
-
-  //here it is
-  var user = req.user;
-  console.log(user)
-
-  //you probably also want to pass this to your view
-  res.render('profile', {"user": user.name });
+  if (req.isAuthenticated()) {
+    return res.json(req.user);
+  } else {
+    return res.json(req.user);
+  }
 });
 
 passport.serializeUser(function(user, done) {
@@ -92,9 +96,7 @@ router.post('/register', upload.single('profileimage') ,function(req, res, next)
   var errors = req.validationErrors();
 
   if(errors){
-  	res.render('register', {
-  		errors: errors
-  	});
+  	res.status(404).json({"error":errors});
   } else{
   	var newUser = new User({
       name: name,
@@ -109,17 +111,13 @@ router.post('/register', upload.single('profileimage') ,function(req, res, next)
       console.log(user);
     });
 
-    req.flash('success', 'You are now registered and can login');
-
-    res.location('/');
-    res.redirect('/');
+    return res.sendStatus(200);
   }
 });
 
 router.get('/logout', function(req, res){
   req.logout();
-  req.flash('success', 'You are now logged out');
-  res.redirect('/users/login');
+  req.sendStatus(200);
 });
 
 module.exports = router;

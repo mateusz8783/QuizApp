@@ -3,6 +3,7 @@ import logo from './logo.svg';
 import './App.css';
 import React, {useEffect, useState} from 'react'
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import axios from 'axios';
 
 import Header from './Header';
 import Login from "./Login";
@@ -11,6 +12,7 @@ import LoadingScreen from "./LoadingScreen";
 import NotFound from "./NotFound";
 
 const backendUrl = "http://localhost:3333"
+axios.defaults.withCredentials = true;
 var apiState;
 var apiRes;
 

@@ -4,8 +4,6 @@ import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import "./Login.css";
 
-const backendLoginUrl = "http://localhost:3333/users/login"
-
 function Login() {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
@@ -14,11 +12,11 @@ function Login() {
         return username.length > 0 && password.length > 0;
     }
 
-    function handleSubmit(event) {
+    async function handleSubmit(event) {
         event.preventDefault();
 
         axios.post(
-            backendLoginUrl,
+            process.env.REACT_APP_BACKEND_ADDRESS + "/users/login",
             {},
             {
                 params: {
@@ -33,10 +31,38 @@ function Login() {
             return response.statusText;
         })
         .catch(error => {
-            alert(error.message);
-            console.log(error);
-            return error.message;
+            if(error.response !== undefined && error.response.status === 401) {
+                alert("Wrong credentials!");
+            }
+            else {
+                alert(error.message);
+                console.log(error);
+                return error.message;
+            }
         });
+    }
+
+    async function testQuestion(event) {
+        event.preventDefault();
+
+        axios.get(
+            process.env.REACT_APP_BACKEND_ADDRESS + "/your_questions",
+            {})
+            .then(response => {
+                alert("Got questions");
+                console.log(response);
+                return response.statusText;
+            })
+            .catch(error => {
+                if(error.response.status === 401) {
+                    alert("Unauthorized");
+                }
+                else {
+                    alert(error.message);
+                    console.log(error);
+                    return error.message;
+                }
+            });
     }
 
     return (
@@ -63,6 +89,9 @@ function Login() {
                 </Form.Group>
                 <Button block size="lg" type="submit" disabled={!validateForm()}>
                     Login
+                </Button>
+                <Button block size="lg" type="button" onClick={testQuestion}>
+                    Questions
                 </Button>
             </Form>
         </div>

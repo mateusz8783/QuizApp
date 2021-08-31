@@ -8,10 +8,9 @@ var Question = require('../models/question');
 /* GET edit page. */
 router.get('/', function(req, res){
   if (req.isAuthenticated()) {
-    res.render('delete_question');
+    return res.sendStatus(200);
   } else {
-    req.flash('error', 'You must be logged in to access this page');
-    res.redirect('/users/login');
+    return res.sendStatus(401);
   }
 });
 
@@ -26,9 +25,7 @@ router.post('/',async function(req, res) {
     var errors = req.validationErrors();
   
     if(errors){
-        res.render('error', {
-            errors: errors
-        });
+        res.status(404).json({"error":errors});
     } else{
         try {
           const question = await Question.deleteOne({_id})
@@ -36,19 +33,14 @@ router.post('/',async function(req, res) {
           if(question.deletedCount === 0){
               return res.status(404).json()
           }else{
-            req.flash('success', 'Question deleted successfully from the data base');
+            return res.sendStatus(200);
           }
         } catch (error) {
           return res.status(500).json({"error":error})
       }
-  
-
       };
-      res.location('/');
-      res.redirect('/');
     } else {
-      req.flash('error', 'You must be logged in to access this page');
-      res.redirect('/users/login');
+      return res.sendStatus(401);
     }
   });
 

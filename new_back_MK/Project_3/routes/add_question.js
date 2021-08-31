@@ -8,10 +8,9 @@ var Question = require('../models/question');
 /* GET edit page. */
 router.get('/', function(req, res){
   if (req.isAuthenticated()) {
-    res.render('add_question');
+    return res.sendStatus(200);
   } else {
-    req.flash('error', 'You must be logged in to access this page');
-    res.redirect('/users/login');
+    return res.sendStatus(401);
   }
     
 });
@@ -44,9 +43,7 @@ router.post('/', upload.single('profileimage') ,function(req, res, next) {
     var errors = req.validationErrors();
   
     if(errors){
-        res.render('error', {
-            errors: errors
-        });
+        res.status(404).json({"error":errors});
     } else{
         var newQuestion = new Question({
         question: question,
@@ -62,15 +59,10 @@ router.post('/', upload.single('profileimage') ,function(req, res, next) {
         if(err) throw err;
         console.log(question);
       });
-  
-      req.flash('success', 'Question added successfully to the data base');
-  
-      res.location('/');
-      res.redirect('/');
+      req.json(newQuestion);
     }
   } else {
-    req.flash('error', 'You must be logged in to access this page');
-    res.redirect('/users/login');
+    return res.sendStatus(401);
   }
   });
 
