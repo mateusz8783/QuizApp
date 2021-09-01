@@ -1,19 +1,35 @@
 import React, { useState } from "react";
+import {useHistory} from "react-router-dom";
 import axios from 'axios';
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
+
 import "./Login.css";
+import LoaderButton from "./components/LoaderButton";
+import { UseAppContext } from "./Context";
+import { onError } from "./Error";
+import { useFormFields } from "./CustomHooks";
 
 function Login() {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
+    const { userHasAuthenticated } = UseAppContext();
+    const [isLoading, setIsLoading] = useState(false);
+    const [fields, handleFieldChange] = useFormFields({
+        username: "",
+        password: ""
+    });
+    const history = useHistory();
 
     function validateForm() {
-        return username.length > 0 && password.length > 0;
+        return fields.username.length > 0 && fields.password.length > 0;
     }
 
     async function handleSubmit(event) {
         event.preventDefault();
+        setIsLoading(true);
+        let username = fields.username;
+        let password = fields.password;
 
         axios.post(
             process.env.REACT_APP_BACKEND_ADDRESS + "/users/login",
@@ -26,16 +42,19 @@ function Login() {
             }
         )
         .then(response => {
-            alert("Logged in");
+            setIsLoading(false);
+            userHasAuthenticated(true);
             console.log(response);
+            history.push("/profile")
             return response.statusText;
         })
         .catch(error => {
+            setIsLoading(false);
             if(error.response !== undefined && error.response.status === 401) {
                 alert("Wrong credentials!");
             }
             else {
-                alert(error.message);
+                onError(error);
                 console.log(error);
                 return error.message;
             }
@@ -73,23 +92,29 @@ function Login() {
                     <Form.Control
                         autoFocus
                         type="text"
-                        value={username}
+                        value={fields.username}
                         className="form-input"
-                        onChange={(e) => setUsername(e.target.value)}
+                        onChange={handleFieldChange}
                     />
                 </Form.Group>
                 <Form.Group size="lg" controlId="password">
                     <Form.Label>Password</Form.Label>
                     <Form.Control
                         type="password"
-                        value={password}
+                        value={fields.password}
                         className="form-input"
-                        onChange={(e) => setPassword(e.target.value)}
+                        onChange={handleFieldChange}
                     />
                 </Form.Group>
-                <Button block size="lg" type="submit" disabled={!validateForm()}>
+                <LoaderButton
+                    block
+                    size="lg"
+                    type="submit"
+                    isLoading={isLoading}
+                    disabled={!validateForm()}
+                >
                     Login
-                </Button>
+                </LoaderButton>
                 <Button block size="lg" type="button" onClick={testQuestion}>
                     Questions
                 </Button>
