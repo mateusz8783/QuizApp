@@ -76,7 +76,7 @@ const App = () => {
           <div className="bg-light">
             <div className="App container py-3">
               <Navbar collapseOnSelect bg="light" expand="md" className="mb-3">
-                <LinkContainer to="/signup">
+                <LinkContainer to="/">
                   <Navbar.Brand className="font-weight-bold text-muted">
                     Quiz App
                   </Navbar.Brand>

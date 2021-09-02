@@ -37,7 +37,7 @@ router.get('/profile', function(req, res, next) {
   if (req.isAuthenticated()) {
     return res.json(req.user);
   } else {
-    return res.json(req.user);
+    return res.sendStatus(401);
   }
 });
 
@@ -109,15 +109,14 @@ router.post('/register', upload.single('profileimage') ,function(req, res, next)
     User.createUser(newUser, function(err, user){
       if(err) throw err;
       console.log(user);
+      return res.json(user);
     });
-
-    return res.sendStatus(200);
   }
 });
 
 router.get('/logout', function(req, res){
   req.logout();
-  req.sendStatus(200);
+  res.sendStatus(200);
 });
 
 module.exports = router;

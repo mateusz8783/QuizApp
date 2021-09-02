@@ -59,7 +59,7 @@ router.post('/', upload.single('profileimage') ,function(req, res, next) {
         if(err) throw err;
         console.log(question);
       });
-      req.json(newQuestion);
+      res.json(newQuestion);
     }
   } else {
     return res.sendStatus(401);

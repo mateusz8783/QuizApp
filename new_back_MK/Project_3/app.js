@@ -2,16 +2,17 @@ var express = require('express');
 var path = require('path');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
-var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var session = require('express-session');
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
+var bcrypt = require('bcryptjs');
+var cookieParser = require('cookie-parser');
 var expressValidator = require('express-validator');
 var multer = require('multer');
 var upload = multer({dest: './public/images'});
 var flash = require('connect-flash');
-var bcrypt = require('bcryptjs');
+
 var mongo = require('mongodb');
 var mongoose = require('mongoose');
 var db = mongoose.connection;
@@ -60,6 +61,7 @@ app.use(session({
 // Passport
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(cookieParser());
 
 // Validator
 app.use(expressValidator({
@@ -79,7 +81,7 @@ app.use(expressValidator({
   }
 }));
 
-app.use(cookieParser());
+
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(flash());

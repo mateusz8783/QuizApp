@@ -129,8 +129,6 @@ function Profile() {
                                         </div>
                                         <h5 className="user-name">{profile.name}</h5>
                                         <h6 className="user-email">{profile.email}</h6>
-                                    </div>
-                                    <div className="about">
                                         <h7 className="mb-2 text-primary">{profile.username}</h7>
                                     </div>
                                 </div>
