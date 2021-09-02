@@ -6,14 +6,14 @@ import Button from "react-bootstrap/Button";
 
 import "./Login.css";
 import LoaderButton from "./components/LoaderButton";
-import { UseAppContext } from "./Context";
+import { useAppContext } from "./Context";
 import { onError } from "./Error";
 import { useFormFields } from "./CustomHooks";
 
 function Login() {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
-    const { userHasAuthenticated } = UseAppContext();
+    const { userHasAuthenticated } = useAppContext();
     const [isLoading, setIsLoading] = useState(false);
     const [fields, handleFieldChange] = useFormFields({
         username: "",
@@ -73,7 +73,7 @@ function Login() {
                 return response.statusText;
             })
             .catch(error => {
-                if(error.response.status === 401) {
+                if(error.response !== undefined && error.response.status === 401) {
                     alert("Unauthorized");
                 }
                 else {
@@ -115,9 +115,6 @@ function Login() {
                 >
                     Login
                 </LoaderButton>
-                <Button block size="lg" type="button" onClick={testQuestion}>
-                    Questions
-                </Button>
             </Form>
         </div>
     );

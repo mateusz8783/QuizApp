@@ -4,7 +4,7 @@ import LoadingScreen from "./LoadingScreen";
 function getQuestionsPromise() {
     console.log("Retrieving questions...");
     return new Promise((resolve, reject) => {
-            var response = fetch(process.env.REACT_APP_BACKEND_ADDRESS + "/questions")
+            var response = fetch(process.env.REACT_APP_BACKEND_ADDRESS + "/your_questions")
                 .catch(err => err);
             response ? resolve(response) : reject("API call timed out");
     });

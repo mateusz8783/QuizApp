@@ -7,6 +7,8 @@ import axios from 'axios';
 import './App.css';
 import Header from './Header';
 import Login from "./Login";
+import Signup from "./Signup";
+import Profile from "./Profile";
 import Questions from "./Questions";
 import LoadingScreen from "./LoadingScreen";
 import NotFound from "./NotFound";
@@ -74,12 +76,28 @@ const App = () => {
           <div className="bg-light">
             <div className="App container py-3">
               <Navbar collapseOnSelect bg="light" expand="md" className="mb-3">
-                <LinkContainer to="/">
+                <LinkContainer to="/signup">
                   <Navbar.Brand className="font-weight-bold text-muted">
                     Quiz App
                   </Navbar.Brand>
                 </LinkContainer>
                 <Navbar.Toggle />
+                <Navbar.Collapse className="justify-content-start">
+                  <Nav activeKey={window.location.pathname}>
+                    {isAuthenticated ? (
+                      <>
+                        <LinkContainer to="/profile">
+                          <Nav.Link>Profile</Nav.Link>
+                        </LinkContainer>
+                        <LinkContainer to="/questions">
+                          <Nav.Link>Questions</Nav.Link>
+                        </LinkContainer>
+                      </>
+                    ) : (
+                      <></>
+                    )}
+                  </Nav>
+                </Navbar.Collapse>
                 <Navbar.Collapse className="justify-content-end">
                   <Nav activeKey={window.location.pathname}>
                     {isAuthenticated ? (
@@ -113,8 +131,10 @@ const App = () => {
                   </header>
                 );
               }}/>
+              <Route path={"/profile"} render={props => <Profile/>}/>
               <Route path={"/questions"} render={props => <Questions/>}/>
               <Route path={"/login"} render={props => <Login/>}/>
+              <Route path={"/signup"} render={props => <Signup/>}/>
               <Route><NotFound/></Route>
             </Switch>
           </div>
