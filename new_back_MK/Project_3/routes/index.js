@@ -11,4 +11,8 @@ router.get('/', function(req, res) {
 	
 });
 
+router.get('/apicall', function(req, res) {
+	return res.send("Welcome to Quiz App");
+});
+
 module.exports = router;
