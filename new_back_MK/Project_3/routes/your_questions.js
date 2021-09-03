@@ -10,13 +10,12 @@ router.get('/', async function (req, res) {
             var dbo = db.db("quiz");
             await dbo.collection("questions").find({}).toArray(async function(err, result) {
                 if (err) throw err;
-                data = result;
-                for( var i = 0; i < data.length; i++){ 
-                    if ( data[i].owner !== user.username) { 
-                        data.splice(i, 1); 
+                data = [];
+                for( var i = 0; i < result.length; i++){
+                    if ( result[i].owner === user.username) { 
+                        data.push(result[i]); 
                     }
                 }
-                console.log(data)
                 db.close();
                 return res.json(data);
                 });

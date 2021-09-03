@@ -16,6 +16,8 @@ import { AppContext } from "./Context";
 import Navbar from "react-bootstrap/Navbar";
 import {LinkContainer} from "react-router-bootstrap";
 import Nav from "react-bootstrap/Nav";
+import AddQuestion from "./AddQuestion";
+import Quiz from "./Quiz";
 
 axios.defaults.withCredentials = true;
 
@@ -26,7 +28,7 @@ function getApiResponsePromise() {
   console.log("Calling getApiResponsePromise...");
   return new Promise((resolve, reject) => {
     setTimeout(function() {
-      var response = fetch(process.env.REACT_APP_BACKEND_ADDRESS)
+      var response = fetch(process.env.REACT_APP_BACKEND_ADDRESS + "/apicall")
           .then(res => apiRes = res.text())
           .then(status => apiState = status)
           .catch(err => err);
@@ -54,20 +56,19 @@ const App = () => {
     history.push("/login");
   }
 
-  const apiResponse = "NULL";
-  // const [apiResponse, setApiResponse] = useState("Not responding");
-  // React.useEffect(() => {
-  //   async function getApiResponse() {
-  //     const res = await getApiResponsePromise(); // type: Promise<Interface>
-  //     setApiResponse(res);
-  //   }
-  //
-  //   getApiResponse();
-  // }, [])
-  //
-  // if (!apiResponse) {
-  //   return <LoadingScreen/>
-  // }
+  const [apiResponse, setApiResponse] = useState();
+  React.useEffect(() => {
+    async function getApiResponse() {
+      const res = await getApiResponsePromise(); // type: Promise<Interface>
+      setApiResponse(res);
+    }
+
+    getApiResponse();
+  }, [])
+
+  if (!apiResponse) {
+    return <LoadingScreen/>
+  }
 
   return (
     <div className="App">
@@ -91,6 +92,12 @@ const App = () => {
                         </LinkContainer>
                         <LinkContainer to="/questions">
                           <Nav.Link>Questions</Nav.Link>
+                        </LinkContainer>
+                        <LinkContainer to="/add_question">
+                          <Nav.Link>Add Question</Nav.Link>
+                        </LinkContainer>
+                        <LinkContainer to="/quiz">
+                          <Nav.Link>Start Quiz</Nav.Link>
                         </LinkContainer>
                       </>
                     ) : (
@@ -133,6 +140,8 @@ const App = () => {
               }}/>
               <Route path={"/profile"} render={props => <Profile/>}/>
               <Route path={"/questions"} render={props => <Questions/>}/>
+              <Route path={"/add_question"} render={props => <AddQuestion/>}/>
+              <Route path={"/quiz"} render={props => <Quiz/>}/>
               <Route path={"/login"} render={props => <Login/>}/>
               <Route path={"/signup"} render={props => <Signup/>}/>
               <Route><NotFound/></Route>

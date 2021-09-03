@@ -1,0 +1,7 @@
+.quiz-table .correct-cell {
+    background: #04c708;
+}
+
+.quiz-table td:hover {
+    background-color: #fcd821;
+}
